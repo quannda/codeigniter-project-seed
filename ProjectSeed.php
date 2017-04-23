@@ -2,10 +2,10 @@
 /**
  * Part of CodeIgniter Composer Installer
  *
- * @author     Kenji Suzuki <https://github.com/kenjis>
+ * @author     Quan NDA <https://github.com/quannda>
  * @license    MIT License
- * @copyright  2015 Kenji Suzuki
- * @link       https://github.com/kenjis/codeigniter-composer-installer
+ * @copyright  2017 Quan NDA
+ * @link       https://github.com/quannda/codeigniter-project-seed
  */
 
 namespace QuanNDA\CodeIgniter;
@@ -14,6 +14,41 @@ use Composer\Script\Event;
 
 class ProjectSeed
 {
+	/**
+	 * Composer post create-project script
+	 *
+	 * @param Event $event
+	 */
+	public static function postCreateProject(Event $event = null)
+	{
+		cp('composer.json.init', 'composer.json');
+		// Show config guide message
+		self::showConfigGuide($event);
+		// remove step 1 waste
+		self::cleanSelf();
+	}
+
+	/**
+	 * show help for Config project
+	 *
+	 * @param Event $event
+	 */
+	private static function showConfigGuide(Event $event = null)
+	{
+		$io = $event->getIO();
+		$io->write('==================================================');
+		$io->write(
+			'<info>`composer.json` was installed. Please take a look on config/app in composer.json to specify your multi application.</info>'
+		);
+		$io->write('then run: composer install');
+		$io->write('==================================================');
+	}
+
+	private static function cleanSelf()
+	{
+		unlink('composer.json.init');
+	}
+
 	/**
 	 * Composer post install script
 	 *
