@@ -1,0 +1,59 @@
+{
+  "name":        "quannda/codeigniter-project-seed",
+  "description": "Package to install Multiple Application CodeIgniter3 in one project via Composer with secure folder structure.",
+  "keywords":    [
+    "CodeIgniter",
+    "Composer",
+    "installer"
+  ],
+  "homepage":    "https://github.com/quannda/codeigniter-project-seed",
+  "license":     "MIT",
+  "authors":     [
+    {
+      "name":  "Quan NDA, on an idea from kenjis/codeigniter-composer-installer",
+      "email": "QuanNDA@gmail.com"
+    }
+  ],
+  "require":     {
+    "codeigniter/framework": "3.1.*"
+  },
+  "autoload":    {
+    "psr-4": {
+      "QuanNDA\\CodeIgniter\\": "./"
+    }
+  },
+  "scripts":     {
+    "post-create-project-cmd": [
+      "QuanNDA\\CodeIgniter\\ProjectSeed::postInstall"
+    ]
+  },
+  "extra":       {
+    "branch-alias": {
+      "dev-master": "1.0.x-dev"
+    }
+  },
+  "suggest":     {
+    "kenjis/codeigniter-cli":      "A command-line tool for CodeIgniter 3.0",
+    "kenjis/ci-phpunit-test":      "An easier way to use PHPUnit with CodeIgniter 3.0",
+    "kenjis/codeigniter-ss-twig":  "A Simple and Secure Twig integration for CodeIgniter 3.0",
+    "kenjis/codeigniter-doctrine": "A simple Doctrine integration for CodeIgniter 3.0",
+    "kenjis/codeigniter-deployer": "A Deployment Tool for CodeIgniter 3.0"
+  },
+  "config" : {
+    "vendor-dir" : "vendor",
+    "apps":        {
+      "backend":  {
+        "source": "application/backend",
+        "doc_root": "public_html/cpanel"
+      },
+      "frontend": {
+        "source": "application/frontend",
+        "doc_root": "public_html"
+      },
+      "api": {
+        "source": "application/api",
+        "doc_root": "public_html/api"
+      }
+    }
+  }
+}
