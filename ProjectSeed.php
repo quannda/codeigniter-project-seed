@@ -39,14 +39,14 @@ class ProjectSeed
 		foreach ($apps as $app) {
 			if (is_dir($app['source'])) {
 				$safe_install = false;
-				$io->write('Folder '.$app['source'].' is already exist.');
+				$io->write('Folder ' . $app['source'] . ' is already exist.');
 			}
 			if (is_dir($app['doc_root'])) {
 				$safe_install = false;
-				$io->write('Folder '.$app['doc_root'].' is already exist.');
+				$io->write('Folder ' . $app['doc_root'] . ' is already exist.');
 			}
 		}
-		if(!$safe_install){
+		if (!$safe_install) {
 			$io->write('Not safe for install. Please remove all exist application folder and its doc_root');
 			$io->write('Exit with error');
 			return;
@@ -54,17 +54,16 @@ class ProjectSeed
 		$io->write('OK!');
 		$io->write('==================================================');
 		$io->write('Begin copy CodeIgniter files ...');
-		foreach ($apps as $app) {
+		foreach ($apps as $app_name => $app) {
 			// Copy CodeIgniter files
-			$io->write('Create folder ' . $app['source']);
-			mkdir($app['source'], 0755, true);
-			$io->write('Create folder ' . $app['doc_root']);
-			mkdir($app['doc_root'], 0755, true);
+			$io->write('Create folder for ' . $app_name);
 
-			self::recursiveCopy('vendor/codeigniter/framework/application', $app['source']);
-
-			copy('vendor/codeigniter/framework/index.php', __DIR__ . $app['public'] . '/index.php');
-			copy('dot.htaccess', __DIR__ . $app['public'] . '/.htaccess');
+			self::recursiveCopy('vendor/codeigniter/framework/application', $app['source'], $io);
+			if (!is_dir($app['doc_root'])) {
+				mkdir($app['doc_root'], 075, true);
+			}
+			copy('vendor/codeigniter/framework/index.php', $app['doc_root'] . '/index.php');
+			copy('dot.htaccess', $app['doc_root'] . '/.htaccess');
 			copy('vendor/codeigniter/framework/.gitignore', '.gitignore');
 
 			//map doc_root to relative path
@@ -74,7 +73,7 @@ class ProjectSeed
 			}
 			$relative_folders = implode('/', $relative_folders);
 			// Fix paths in index.php
-			$file = __DIR__ . $app['public'] . '/index.php';
+			$file = $app['doc_root'] . '/index.php';
 			$contents = file_get_contents($file);
 			$contents = str_replace(
 				'$system_path = \'system\';',
@@ -118,6 +117,32 @@ class ProjectSeed
 		self::deleteSelf();
 	}
 
+	/**
+	 * Recursive Copy
+	 *
+	 * @param string $src
+	 * @param string $dst
+	 */
+	private static function recursiveCopy($src, $dst, $io)
+	{
+		$io->write('create folder ' . $dst);
+		if (!is_dir($dst)) {
+			mkdir($dst, 0755, true);
+		}
+		$iterator = new \RecursiveIteratorIterator(
+			new \RecursiveDirectoryIterator($src, \RecursiveDirectoryIterator::SKIP_DOTS),
+			\RecursiveIteratorIterator::SELF_FIRST
+		);
+
+		foreach ($iterator as $file) {
+			if ($file->isDir()) {
+				mkdir($dst . '/' . $iterator->getSubPathName());
+			} else {
+				copy($file, $dst . '/' . $iterator->getSubPathName());
+			}
+		}
+	}
+
 	private static function composerUpdate()
 	{
 		passthru('composer update');
@@ -141,40 +166,15 @@ class ProjectSeed
 		$io->write('$ cd <codeigniter_project_folder>');
 		$io->write('$ php bin/install.php');
 		$io->write('<info>Above command will show help message.</info>');
-		$io->write('See <https://github.com/kenjis/codeigniter-composer-installer> for details');
+		$io->write('See <https://github.com/quannda/codeigniter-project-seed> for details');
 		$io->write('==================================================');
 	}
 
 	private static function deleteSelf()
 	{
 		unlink(__FILE__);
-		rmdir('src');
 		unlink('composer.json.dist');
 		unlink('dot.htaccess');
 		unlink('LICENSE.md');
-	}
-
-	/**
-	 * Recursive Copy
-	 *
-	 * @param string $src
-	 * @param string $dst
-	 */
-	private static function recursiveCopy($src, $dst)
-	{
-		mkdir($dst, 0755);
-
-		$iterator = new \RecursiveIteratorIterator(
-			new \RecursiveDirectoryIterator($src, \RecursiveDirectoryIterator::SKIP_DOTS),
-			\RecursiveIteratorIterator::SELF_FIRST
-		);
-
-		foreach ($iterator as $file) {
-			if ($file->isDir()) {
-				mkdir($dst . '/' . $iterator->getSubPathName());
-			} else {
-				copy($file, $dst . '/' . $iterator->getSubPathName());
-			}
-		}
 	}
 }
