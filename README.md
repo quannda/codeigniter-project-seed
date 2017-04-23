@@ -63,10 +63,15 @@ You can define yours applications by clone then change composer.json with key
 ```
 $ composer create-project quannda/codeigniter-project-seed codeigniter
 ```
+Above command installs draft source code structure for project in folder codeigniter, with sample 3 applications config in composer.json. Please take a look and make any change if necessary.
+Then use
+```
+cd codeigniter && composer install
+```
 
 Above command installs `public/.htaccess` to remove `index.php` in your URL. If you don't need it, please remove it.
 
-And it changes `application/config/config.php`:
+And it changes each `application/{app_name}/config/config.php`:
 
 ~~~
 $config['composer_autoload'] = FALSE;

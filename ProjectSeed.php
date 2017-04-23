@@ -40,7 +40,10 @@ class ProjectSeed
 		$io->write(
 			'<info>`composer.json` was installed. Please take a look on config/app in composer.json to make any change for best matching with your multi applications project.</info>'
 		);
-		$io->write('then run: composer install');
+		$io->write('<info>then:</info>');
+		$io->write('$ cd <codeigniter_project_folder>');
+		$io->write('$ composer install');
+
 		$io->write('==================================================');
 	}
 

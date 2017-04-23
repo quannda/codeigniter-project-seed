@@ -14,9 +14,6 @@
       "email": "QuanNDA@gmail.com"
     }
   ],
-  "require":     {
-    "codeigniter/framework": "3.1.*"
-  },
   "autoload":    {
     "psr-4": {
       "QuanNDA\\CodeIgniter\\": "./"
