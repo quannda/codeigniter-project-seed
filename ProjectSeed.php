@@ -21,7 +21,7 @@ class ProjectSeed
 	 */
 	public static function postCreateProject(Event $event = null)
 	{
-		cp('composer.json.init', 'composer.json');
+		copy('composer.json.init', 'composer.json');
 		// Show config guide message
 		self::showConfigGuide($event);
 		// remove step 1 waste
@@ -38,7 +38,7 @@ class ProjectSeed
 		$io = $event->getIO();
 		$io->write('==================================================');
 		$io->write(
-			'<info>`composer.json` was installed. Please take a look on config/app in composer.json to specify your multi application.</info>'
+			'<info>`composer.json` was installed. Please take a look on config/app in composer.json to make any change for best matching with your multi applications project.</info>'
 		);
 		$io->write('then run: composer install');
 		$io->write('==================================================');

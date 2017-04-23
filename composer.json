@@ -31,22 +31,5 @@
     "branch-alias": {
       "dev-master": "1.0.x-dev"
     }
-  },
-  "config" : {
-    "vendor-dir" : "vendor",
-    "apps":        {
-      "backend":  {
-        "source": "application/backend",
-        "doc_root": "public_html/cpanel"
-      },
-      "frontend": {
-        "source": "application/frontend",
-        "doc_root": "public_html"
-      },
-      "api": {
-        "source": "application/api",
-        "doc_root": "public_html/api"
-      }
-    }
   }
 }
