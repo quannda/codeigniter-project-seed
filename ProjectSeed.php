@@ -51,11 +51,14 @@ class ProjectSeed
 			$io->write('Exit with error');
 			return;
 		}
+		$io->write('OK!');
 		$io->write('==================================================');
 		$io->write('Begin copy CodeIgniter files ...');
 		foreach ($apps as $app) {
 			// Copy CodeIgniter files
+			$io->write('Create folder ' . $app['source']);
 			mkdir($app['source'], 0755, true);
+			$io->write('Create folder ' . $app['doc_root']);
 			mkdir($app['doc_root'], 0755, true);
 
 			self::recursiveCopy('vendor/codeigniter/framework/application', $app['source']);
